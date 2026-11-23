@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Site editor | Sofia Melo Stevens</title>
+<meta name="robots" content="noindex">
+<style>
+  :root { --ink:#07131c; --panel:#0e2231; --line:#1f3646; --cream:#f0e6cc; --soft:#b8b5a3; --rust:#e2683b; --rust2:#f58d62; --steel:#5b93d1; }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body { background: var(--ink); color: var(--cream); font: 15px/1.5 "Segoe UI", system-ui, sans-serif; display: grid; grid-template-columns: 330px 1fr; }
+  aside { background: var(--panel); border-right: 1px solid var(--line); padding: 18px; overflow-y: auto; height: 100vh; }
+  h1 { font-size: 1.3rem; margin: 0 0 2px; }
+  .sub { color: var(--soft); margin: 0 0 16px; font-size: .9rem; }
+  h2 { font-size: .8rem; text-transform: none; letter-spacing: 0; color: var(--rust); margin: 22px 0 6px; font-weight: 700; }
+  p { margin: 6px 0; color: var(--soft); }
+  select, button { font: inherit; }
+  select { width: 100%; padding: 9px; background: var(--ink); color: var(--cream); border: 1px solid var(--line); border-radius: 6px; }
+  button { cursor: pointer; border: 0; border-radius: 6px; padding: 9px 12px; background: var(--rust); color: #1a0b05; font-weight: 700; }
+  button:hover { background: var(--rust2); }
+  button.ghost { background: transparent; color: var(--cream); border: 1px solid var(--soft); font-weight: 600; }
+  button.ghost:hover { background: var(--line); }
+  button.full { width: 100%; margin: 4px 0; }
+  .row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 6px 0; }
+  .row label { flex: 1; }
+  input[type=color] { width: 46px; height: 32px; border: 1px solid var(--line); border-radius: 6px; background: var(--ink); padding: 2px; cursor: pointer; }
+  #imgs { list-style: none; padding: 0; margin: 6px 0; }
+  #imgs li { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: .85rem; margin: 4px 0; word-break: break-all; }
+  #imgs button { padding: 5px 9px; font-size: .8rem; }
+  details { margin-top: 18px; border-top: 1px solid var(--line); padding-top: 10px; }
+  summary { cursor: pointer; font-weight: 600; }
+  ol { padding-left: 18px; color: var(--soft); }
+  ol li { margin: 5px 0; }
+  main { position: relative; height: 100vh; min-width: 0; }
+  iframe { width: 100%; height: 100%; border: 0; background: var(--ink); }
+  #warn { position: absolute; inset: 0; background: rgba(7,19,28,.96); z-index: 5; padding: 40px; display: none; }
+  #warn.on { display: block; }
+  #status { color: var(--soft); font-size: .85rem; min-height: 1.3em; margin-top: 6px; }
+  #status.dirty { color: var(--rust2); }
+  #small { display: none; }
+  @media (max-width: 900px) {
+    body { display: block; }
+    #small { display: block; padding: 40px 24px; }
+    aside, main { display: none; }
+  }
+</style>
+</head>
+<body>
+<div id="small">
+  <h1>Use a laptop for this</h1>
+  <p>The site editor needs a bigger screen. Open this page on a computer.</p>
+</div>
+
+<aside>
+  <h1>Site editor</h1>
+  <p class="sub">Change text, swap images and tweak colors, then download your changes.</p>
+
+  <label for="page"><b>Page to edit</b></label>
+  <select id="page"></select>
+
+  <h2>1. Edit</h2>
+  <p><b>Text:</b> click any text on the page and type. Ctrl+Z (Cmd+Z on a Mac) undoes.</p>
+  <p><b>Images:</b> click an image to replace it with one from your computer. Click the big top picture on the home page to swap it too.</p>
+
+  <h2>2. Colors (optional)</h2>
+  <div class="row"><label for="c-rust">Accent (buttons, lines)</label><input type="color" id="c-rust"></div>
+  <div class="row"><label for="c-ink">Background</label><input type="color" id="c-ink"></div>
+  <div class="row"><label for="c-cream">Text</label><input type="color" id="c-cream"></div>
+  <div class="row"><label for="c-steel">Second accent</label><input type="color" id="c-steel"></div>
+  <button class="ghost full" id="dl-css">Download style.css</button>
+  <p>Color changes apply to every page, so you only download this once.</p>
+
+  <h2>3. Save</h2>
+  <button class="full" id="dl-page">Download this page</button>
+  <p>New images you added:</p>
+  <ul id="imgs"><li style="color:#b8b5a3">None yet</li></ul>
+  <button class="ghost full" id="dl-imgs" hidden>Download all new images</button>
+  <div id="status">No changes yet.</div>
+
+  <details>
+    <summary>How do I publish my changes?</summary>
+    <ol>
+      <li>Download the page (and any new images or style.css) with the buttons above.</li>
+      <li>Open your repo on github.com.</li>
+      <li>For a page or style.css: click <b>Add file → Upload files</b>, drag the file in, and click <b>Commit changes</b>. A file with the same name replaces the old one.</li>
+      <li>For images: open the <b>images</b> folder in the repo first, then <b>Add file → Upload files</b>.</li>
+      <li>Wait 1 to 2 minutes, then refresh your site (Ctrl+Shift+R).</li>
+    </ol>
+    <p>Your browser may ask to allow multiple downloads. Say yes.</p>
+  </details>
+</aside>
+
+<main>
+  <div id="warn">
+    <h1>Open the editor from your live site</h1>
+    <p>This editor can only edit pages when it's opened from the same web address as your site, like <b>https://smelos20.github.io/SofiaMeloStevens/editor.html</b>. Opening it as a file on your computer won't work.</p>
+  </div>
+  <iframe id="frame" title="Page being edited"></iframe>
+</main>
+
+<script>
+// Add new pages here as [name, file]
+const PAGES = [
+  ["Home", "index.html"],
+  ["About", "about.html"],
+  ["Resume", "resume.html"],
+  ["Coast Quest", "coast-quest.html"],
+  ["Archeomancy", "archeomancy.html"],
+  ["Frozen Letters", "frozen-letters.html"],
+  ["Bathysphere Dock", "bathysphere.html"]
+];
+const TEXT_SEL = "h1,h2,h3,p,li,figcaption,.role,.go,.fact,a.btn,footer .social a";
+
+const $ = (id) => document.getElementById(id);
+const sel = $("page"), frame = $("frame"), statusEl = $("status");
+const newImages = new Map(); // path -> {blob, url}
+let counter = 1, dirty = false, cssText = "", colors = {};
+
+PAGES.forEach(([n, f]) => { const o = document.createElement("option"); o.value = f; o.textContent = n; sel.appendChild(o); });
+let currentPage = sel.value;
+
+function setDirty(v = true) {
+  dirty = v;
+  statusEl.textContent = v ? "You have unsaved changes on this page. Use Download this page." : "No changes yet.";
+  statusEl.className = v ? "dirty" : "";
+}
+window.addEventListener("beforeunload", (e) => { if (dirty) { e.preventDefault(); e.returnValue = ""; } });
+
+sel.addEventListener("change", () => {
+  if (dirty && !confirm("You have changes on this page that you haven't downloaded. Switch pages anyway?")) { sel.value = currentPage; return; }
+  currentPage = sel.value; setDirty(false); loadPage();
+});
+function loadPage() { frame.src = currentPage + "?edit=" + Date.now(); }
+
+/* ---------- colors ---------- */
+function hex2rgb(h) { h = h.replace("#", ""); if (h.length === 3) h = h.split("").map(c => c + c).join(""); return [0, 2, 4].map(i => parseInt(h.substr(i, 2), 16)); }
+function rgb2hex(r) { return "#" + r.map(v => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, "0")).join(""); }
+function mix(a, b, t) { const x = hex2rgb(a), y = hex2rgb(b); return rgb2hex(x.map((v, i) => v + (y[i] - v) * t)); }
+function derived() {
+  return {
+    rust: colors.rust, "rust-bright": mix(colors.rust, "#ffffff", 0.22),
+    ink: colors.ink, panel: mix(colors.ink, "#ffffff", 0.07), line: mix(colors.ink, "#ffffff", 0.14),
+    cream: colors.cream, steel: colors.steel
+  };
+}
+function applyColors() {
+  const doc = frame.contentDocument; if (!doc || !doc.head) return;
+  let st = doc.getElementById("__edcolors");
+  if (!st) { st = doc.createElement("style"); st.id = "__edcolors"; doc.head.appendChild(st); }
+  const d = derived();
+  st.textContent = ":root{" + Object.entries(d).map(([k, v]) => "--" + k + ":" + v).join(";") + "}";
+}
+function readVar(name) { const m = cssText.match(new RegExp("--" + name + ":\\s*(#[0-9a-fA-F]{3,8})")); return m ? m[1] : null; }
+fetch("style.css?" + Date.now()).then(r => r.text()).then(t => {
+  cssText = t;
+  ["rust", "ink", "cream", "steel"].forEach(k => {
+    const v = readVar(k) || "#000000"; colors[k] = v; $("c-" + k).value = v;
+    $("c-" + k).addEventListener("input", (e) => { colors[k] = e.target.value; applyColors(); statusEl.textContent = "Colors changed. Download style.css to keep them."; statusEl.className = "dirty"; });
+  });
+}).catch(() => {});
+$("dl-css").addEventListener("click", () => {
+  if (!cssText) { alert("Couldn't load style.css. Open the editor from your live site."); return; }
+  let out = cssText;
+  Object.entries(derived()).forEach(([k, v]) => { out = out.replace(new RegExp("(--" + k + ":\\s*)#[0-9a-fA-F]{3,8}"), "$1" + v); });
+  save(new Blob([out], { type: "text/css" }), "style.css");
+});
+
+/* ---------- editing ---------- */
+frame.addEventListener("load", setup);
+function setup() {
+  let doc;
+  try { doc = frame.contentDocument; void doc.body; } catch (e) { $("warn").classList.add("on"); return; }
+  if (!doc || !doc.body) { $("warn").classList.add("on"); return; }
+  $("warn").classList.remove("on");
+
+  const st = doc.createElement("style"); st.id = "__ed";
+  st.textContent =
+    "[data-ed]{cursor:text}[data-ed]:hover{outline:2px dashed rgba(226,104,59,.7);outline-offset:3px}" +
+    "[data-ed]:focus{outline:2px solid #e2683b;outline-offset:3px}" +
+    "img[data-ed-img]{cursor:pointer}img[data-ed-img]:hover{outline:4px solid #e2683b;outline-offset:-4px}" +
+    ".cover{cursor:pointer}";
+  doc.head.appendChild(st);
+
+  doc.querySelectorAll(TEXT_SEL).forEach((el) => {
+    if (el.closest("nav") || el.closest(".brand")) return;
+    el.setAttribute("contenteditable", "true");
+    el.setAttribute("data-ed", "1");
+    el.addEventListener("input", () => setDirty(true));
+    el.addEventListener("paste", (e) => {
+      e.preventDefault();
+      const t = (e.clipboardData || window.clipboardData).getData("text/plain");
+      doc.execCommand("insertText", false, t);
+    });
+    el.addEventListener("keydown", (e) => { if (e.key === " ") e.stopPropagation(); }, true);
+  });
+  doc.querySelectorAll("a").forEach((a) => a.addEventListener("click", (e) => e.preventDefault(), true));
+  doc.querySelectorAll("img").forEach((img) => {
+    img.setAttribute("data-ed-img", "1");
+    img.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); pickImage(img); });
+  });
+  doc.querySelectorAll(".cover").forEach((c) => c.addEventListener("click", (e) => {
+    if (e.target.closest("[data-ed]") || e.target.closest("a")) return;
+    const im = c.querySelector("img"); if (im) pickImage(im);
+  }));
+  applyColors();
+  // re-show images already replaced earlier in this session
+  doc.querySelectorAll("img").forEach((img) => {
+    const src = img.getAttribute("src");
+    if (newImages.has(src)) { img.setAttribute("data-ed-orig", src); img.setAttribute("data-ed-path", src); img.src = newImages.get(src).url; }
+  });
+}
+
+/* ---------- images ---------- */
+function pickImage(img) {
+  const input = document.createElement("input");
+  input.type = "file"; input.accept = "image/*";
+  input.onchange = () => { if (input.files[0]) processImage(img, input.files[0]); };
+  input.click();
+}
+function processImage(img, file) {
+  if (!img.hasAttribute("data-ed-orig")) img.setAttribute("data-ed-orig", img.getAttribute("src"));
+  let path = img.getAttribute("data-ed-path");
+  if (!path) {
+    const orig = img.getAttribute("data-ed-orig");
+    path = /^images\/[^?#]+\.(jpe?g|png)$/i.test(orig) ? orig : "images/new-" + (counter++) + ".jpg";
+  }
+  const isPng = /\.png$/i.test(path);
+  const url0 = URL.createObjectURL(file);
+  const im = new Image();
+  im.onload = () => {
+    const max = 1800, s = Math.min(1, max / Math.max(im.width, im.height));
+    const c = document.createElement("canvas");
+    c.width = Math.round(im.width * s); c.height = Math.round(im.height * s);
+    const ctx = c.getContext("2d");
+    if (!isPng) { ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, c.width, c.height); }
+    ctx.drawImage(im, 0, 0, c.width, c.height);
+    c.toBlob((blob) => {
+      URL.revokeObjectURL(url0);
+      const old = newImages.get(path); if (old) URL.revokeObjectURL(old.url);
+      const url = URL.createObjectURL(blob);
+      newImages.set(path, { blob, url });
+      img.setAttribute("data-ed-path", path);
+      img.src = url; img.removeAttribute("srcset");
+      const alt = prompt("Short description of this image, for people using screen readers (optional):", img.getAttribute("alt") || "");
+      if (alt !== null) img.setAttribute("alt", alt);
+      renderImages(); setDirty(true);
+    }, isPng ? "image/png" : "image/jpeg", 0.86);
+  };
+  im.onerror = () => { alert("That file couldn't be read as an image. Try a JPG or PNG."); };
+  im.src = url0;
+}
+function renderImages() {
+  const ul = $("imgs"); ul.innerHTML = "";
+  if (!newImages.size) { ul.innerHTML = '<li style="color:#b8b5a3">None yet</li>'; $("dl-imgs").hidden = true; return; }
+  $("dl-imgs").hidden = false;
+  newImages.forEach((v, path) => {
+    const li = document.createElement("li");
+    const span = document.createElement("span"); span.textContent = path;
+    const b = document.createElement("button"); b.className = "ghost"; b.textContent = "Download";
+    b.onclick = () => save(v.blob, path.split("/").pop());
+    li.append(span, b); ul.appendChild(li);
+  });
+}
+$("dl-imgs").addEventListener("click", () => {
+  let i = 0; newImages.forEach((v, path) => { setTimeout(() => save(v.blob, path.split("/").pop()), i++ * 500); });
+});
+
+/* ---------- saving ---------- */
+function save(blob, name) {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+}
+$("dl-page").addEventListener("click", () => {
+  const doc = frame.contentDocument; if (!doc || !doc.documentElement) return;
+  const clone = doc.documentElement.cloneNode(true);
+  ["__ed", "__edcolors"].forEach((id) => { const n = clone.querySelector("#" + id); if (n) n.remove(); });
+  clone.querySelectorAll("[data-ed]").forEach((e) => { e.removeAttribute("contenteditable"); e.removeAttribute("data-ed"); });
+  clone.querySelectorAll("[data-ed-img]").forEach((i) => {
+    const p = i.getAttribute("data-ed-path"); if (p) i.setAttribute("src", p);
+    ["data-ed-img", "data-ed-path", "data-ed-orig"].forEach((a) => i.removeAttribute(a));
+  });
+  save(new Blob(["<!doctype html>\n" + clone.outerHTML], { type: "text/html" }), currentPage);
+  setDirty(false);
+  statusEl.textContent = "Downloaded " + currentPage + ". Upload it to GitHub to publish.";
+});
+
+loadPage();
+</script>
+</body>
+</html>
