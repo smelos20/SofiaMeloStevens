@@ -95,7 +95,7 @@ main.flush { max-width: none; padding: 0 0 90px; }
 .pin img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 0; }
 .pin span { position: absolute; left: 7px; right: 7px; bottom: 4px; font-size: .72rem; color: var(--paper-ink); font-weight: 600; text-align: center; }
 .t1 .pin { right: -14px; top: -26px; --rot: 5deg; }
-.t2 .pin { left: -22px; top: 40%; --rot: -6deg; }
+.t2 .pin { left: -22px; top: 16%; --rot: -6deg; }
 .t3 .pin { right: -10px; top: -30px; --rot: 4deg; }
 .t4 .pin { left: -16px; top: -28px; --rot: -5deg; }
 .tile:hover .pin { transform: rotate(0deg) translateY(-4px); }
@@ -154,3 +154,19 @@ figcaption { color: var(--soft); font-size: .88rem; margin-top: 6px; }
 
 footer { border-top: 1px solid var(--line); padding: 30px 24px 50px; text-align: center; color: var(--soft); font-size: .95rem; }
 footer .social { margin-bottom: 8px; }
+
+/* role tags on project cards */
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 2px; }
+.tags span { font-size: .74rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 3px 9px; border-radius: 99px; border: 1px solid var(--soft); color: var(--soft); }
+.tags span.prod { background: var(--rust); border-color: var(--rust); color: var(--on-rust); }
+
+/* production callouts on project pages */
+.callout { background: var(--panel); border-left: 4px solid var(--rust); border-radius: 6px; padding: 18px 22px; margin: 26px 0; max-width: var(--read); }
+.callout h3 { margin-top: 0; }
+.phase { display: inline-block; font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--steel); margin-top: 60px; }
+.phase + h2 { margin-top: 6px; }
+hr.divider { border: 0; border-top: 1px solid var(--line); margin: 56px 0; }
+
+/* video embeds */
+.video { position: relative; aspect-ratio: 16 / 9; max-width: 900px; margin: 18px 0; border-radius: 6px; overflow: hidden; background: var(--panel); }
+.video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }

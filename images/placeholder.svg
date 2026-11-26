@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000">
+  <rect width="1600" height="1000" fill="#0e2231"/>
+  <rect x="40" y="40" width="1520" height="920" rx="16" fill="none" stroke="#5b93d1" stroke-width="6" stroke-dasharray="28 20"/>
+  <text x="800" y="490" text-anchor="middle" font-family="Arial, sans-serif" font-size="64" font-weight="bold" fill="#f0e6cc">Click to add your image</text>
+  <text x="800" y="570" text-anchor="middle" font-family="Arial, sans-serif" font-size="36" fill="#b8b5a3">Select this, then press "Replace image" in the editor</text>
+</svg>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000">
+  <defs>
+    <pattern id="g" width="80" height="80" patternUnits="userSpaceOnUse"><path d="M80 0H0V80" fill="none" stroke="#1f3646" stroke-width="2"/></pattern>
+    <linearGradient id="v" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0e2231"/><stop offset="1" stop-color="#07131c"/></linearGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#v)"/>
+  <rect width="1600" height="1000" fill="url(#g)"/>
+  <g fill="none" stroke="#e2683b" stroke-width="6">
+    <path d="M120 120h120M120 120v120M1480 120h-120M1480 120v120M120 880h120M120 880v-120M1480 880h-120M1480 880v-120"/>
+  </g>
+  <rect x="520" y="430" width="560" height="140" rx="10" fill="#e2683b"/>
+  <text x="800" y="525" text-anchor="middle" font-family="Impact, 'Arial Narrow', sans-serif" font-size="96" textLength="480" lengthAdjust="spacingAndGlyphs" fill="#1a0b05">UNDER NDA</text>
+  <text x="800" y="650" text-anchor="middle" font-family="Arial, sans-serif" font-size="40" fill="#b8b5a3">Details available on request</text>
+</svg>

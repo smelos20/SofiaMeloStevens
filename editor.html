@@ -6,38 +6,69 @@
 <title>Site editor | Sofia Melo Stevens</title>
 <meta name="robots" content="noindex">
 <style>
-  :root { --ink:#07131c; --panel:#0e2231; --line:#1f3646; --cream:#f0e6cc; --soft:#b8b5a3; --rust:#e2683b; --rust2:#f58d62; --steel:#5b93d1; }
+  :root { --ink:#07131c; --panel:#0e2231; --panel2:#132b3c; --line:#1f3646; --cream:#f0e6cc; --soft:#b8b5a3; --rust:#e2683b; --rust2:#f58d62; --steel:#5b93d1; --good:#a3b650; }
   * { box-sizing: border-box; }
   html, body { height: 100%; margin: 0; }
-  body { background: var(--ink); color: var(--cream); font: 15px/1.5 "Segoe UI", system-ui, sans-serif; display: grid; grid-template-columns: 330px 1fr; }
-  aside { background: var(--panel); border-right: 1px solid var(--line); padding: 18px; overflow-y: auto; height: 100vh; }
-  h1 { font-size: 1.3rem; margin: 0 0 2px; }
-  .sub { color: var(--soft); margin: 0 0 16px; font-size: .9rem; }
-  h2 { font-size: .8rem; text-transform: none; letter-spacing: 0; color: var(--rust); margin: 22px 0 6px; font-weight: 700; }
+  body { background: var(--ink); color: var(--cream); font: 14px/1.45 "Segoe UI", system-ui, sans-serif; display: grid; grid-template-columns: 340px 1fr; }
+  aside { background: var(--panel); border-right: 1px solid var(--line); display: flex; flex-direction: column; height: 100vh; }
+  .scroll { overflow-y: auto; padding: 16px 16px 24px; flex: 1; }
+  h1 { font-size: 1.25rem; margin: 0; }
+  .top { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+  .top a { color: var(--steel); font-size: .85rem; }
+  .sub { color: var(--soft); margin: 2px 0 10px; font-size: .85rem; }
+  section.box { border-top: 1px solid var(--line); padding: 12px 0 4px; }
+  h2 { font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; color: var(--rust); margin: 0 0 8px; font-weight: 700; }
   p { margin: 6px 0; color: var(--soft); }
-  select, button { font: inherit; }
-  select { width: 100%; padding: 9px; background: var(--ink); color: var(--cream); border: 1px solid var(--line); border-radius: 6px; }
-  button { cursor: pointer; border: 0; border-radius: 6px; padding: 9px 12px; background: var(--rust); color: #1a0b05; font-weight: 700; }
+  label { display: block; font-size: .85rem; color: var(--soft); margin: 8px 0 3px; }
+  select, button, input { font: inherit; }
+  select, input[type=text], input[type=url], input[type=password] { width: 100%; padding: 8px 9px; background: var(--ink); color: var(--cream); border: 1px solid var(--line); border-radius: 6px; }
+  input:focus, select:focus { outline: 2px solid var(--steel); outline-offset: 1px; }
+  button { cursor: pointer; border: 0; border-radius: 6px; padding: 8px 11px; background: var(--rust); color: #1a0b05; font-weight: 700; }
   button:hover { background: var(--rust2); }
-  button.ghost { background: transparent; color: var(--cream); border: 1px solid var(--soft); font-weight: 600; }
-  button.ghost:hover { background: var(--line); }
+  button:disabled { opacity: .4; cursor: not-allowed; }
+  button.ghost { background: transparent; color: var(--cream); border: 1px solid #3a5568; font-weight: 600; }
+  button.ghost:hover:not(:disabled) { background: var(--line); }
+  button.danger { background: transparent; color: #ff9b85; border: 1px solid #6b3a30; font-weight: 600; }
+  button.danger:hover { background: #3a1d17; }
   button.full { width: 100%; margin: 4px 0; }
-  .row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 6px 0; }
-  .row label { flex: 1; }
-  input[type=color] { width: 46px; height: 32px; border: 1px solid var(--line); border-radius: 6px; background: var(--ink); padding: 2px; cursor: pointer; }
-  #imgs { list-style: none; padding: 0; margin: 6px 0; }
-  #imgs li { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: .85rem; margin: 4px 0; word-break: break-all; }
-  #imgs button { padding: 5px 9px; font-size: .8rem; }
-  details { margin-top: 18px; border-top: 1px solid var(--line); padding-top: 10px; }
-  summary { cursor: pointer; font-weight: 600; }
-  ol { padding-left: 18px; color: var(--soft); }
-  ol li { margin: 5px 0; }
-  main { position: relative; height: 100vh; min-width: 0; }
-  iframe { width: 100%; height: 100%; border: 0; background: var(--ink); }
-  #warn { position: absolute; inset: 0; background: rgba(7,19,28,.96); z-index: 5; padding: 40px; display: none; }
-  #warn.on { display: block; }
-  #status { color: var(--soft); font-size: .85rem; min-height: 1.3em; margin-top: 6px; }
-  #status.dirty { color: var(--rust2); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+  .row { display: flex; gap: 6px; align-items: center; margin: 6px 0; }
+  .row > * { flex: 1; }
+  .row.colors label { margin: 0; flex: 2; }
+  .row.colors input { flex: 0 0 46px; height: 30px; border: 1px solid var(--line); border-radius: 6px; background: var(--ink); padding: 2px; cursor: pointer; }
+  .add button { background: var(--panel2); color: var(--cream); border: 1px solid var(--line); font-weight: 600; text-align: left; padding: 8px 10px; }
+  .add button:hover { background: var(--line); }
+  #selName { font-weight: 700; color: var(--cream); font-size: 1rem; margin: 0 0 4px; }
+  .hint { font-size: .82rem; color: var(--soft); }
+  .hidden { display: none !important; }
+  details { margin: 6px 0; }
+  summary { cursor: pointer; font-weight: 600; color: var(--cream); padding: 4px 0; }
+  ol { padding-left: 18px; color: var(--soft); margin: 6px 0; }
+  ol li { margin: 4px 0; }
+  ol a, p a { color: var(--steel); }
+  .card { background: var(--panel2); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; margin: 8px 0; }
+  .ok { color: var(--good); }
+  .bad { color: #ff9b85; }
+  footer.bar { border-top: 1px solid var(--line); padding: 12px 16px; background: #0b1b27; }
+  #changes { font-size: .85rem; color: var(--soft); margin-bottom: 8px; max-height: 70px; overflow: auto; }
+  #changes b { color: var(--rust2); }
+  #status { font-size: .85rem; min-height: 1.2em; margin-top: 6px; color: var(--soft); }
+  #status a { color: var(--steel); }
+  .bar .row button { flex: 1; }
+  #publish { flex: 2 !important; }
+  .fmt button { font-family: Georgia, serif; }
+
+  main { position: relative; height: 100vh; min-width: 0; display: flex; flex-direction: column; }
+  .viewbar { display: flex; gap: 6px; align-items: center; padding: 8px 12px; border-bottom: 1px solid var(--line); background: var(--panel); }
+  .viewbar button { padding: 5px 10px; font-size: .85rem; }
+  .viewbar button.on, .viewbar button.on:hover { background: var(--steel); color: #06121b; border-color: var(--steel); }
+  .viewbar .spacer { flex: 1; }
+  .viewbar span { color: var(--soft); font-size: .85rem; }
+  .stage { flex: 1; display: flex; justify-content: center; background: #050d13; overflow: hidden; }
+  iframe { width: 100%; height: 100%; border: 0; background: var(--ink); transition: width .25s ease; }
+  iframe.phone { width: 390px; border-left: 1px solid var(--line); border-right: 1px solid var(--line); }
+  #loading { position: absolute; inset: 48px 0 0; display: flex; align-items: center; justify-content: center; background: rgba(7,19,28,.9); color: var(--soft); font-size: 1rem; z-index: 4; }
   #small { display: none; }
   @media (max-width: 900px) {
     body { display: block; }
@@ -53,241 +84,1061 @@
 </div>
 
 <aside>
-  <h1>Site editor</h1>
-  <p class="sub">Change text, swap images and tweak colors, then download your changes.</p>
+  <div class="scroll">
+    <div class="top"><h1>Site editor</h1><a id="liveLink" href="#" target="_blank" rel="noopener">View live site ↗</a></div>
+    <p class="sub">Click anything on the page to edit it. Press <b>Publish</b> when you're done.</p>
 
-  <label for="page"><b>Page to edit</b></label>
-  <select id="page"></select>
+    <!-- one-time setup -->
+    <section class="box" id="setup">
+      <h2>Connect to GitHub (one time)</h2>
+      <p>This lets the Publish button save straight to your site. You only do this once per computer.</p>
+      <details>
+        <summary>How to get your key</summary>
+        <ol>
+          <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub → new fine-grained token</a> (sign in if asked).</li>
+          <li><b>Token name:</b> Portfolio editor. <b>Expiration:</b> pick a custom date about a year out.</li>
+          <li><b>Repository access:</b> Only select repositories → <b id="repoName">SofiaMeloStevens</b>.</li>
+          <li><b>Permissions → Repository permissions → Contents:</b> Read and write.</li>
+          <li>Click <b>Generate token</b>, copy it, and paste it below.</li>
+        </ol>
+      </details>
+      <label for="token">Your GitHub key</label>
+      <input type="password" id="token" placeholder="github_pat_..." autocomplete="off">
+      <button class="full" id="connect">Connect</button>
+      <p class="hint">The key stays only in this browser on this computer. Don't share it with anyone.</p>
+      <div id="setupMsg" class="hint"></div>
+    </section>
 
-  <h2>1. Edit</h2>
-  <p><b>Text:</b> click any text on the page and type. Ctrl+Z (Cmd+Z on a Mac) undoes.</p>
-  <p><b>Images:</b> click an image to replace it with one from your computer. Click the big top picture on the home page to swap it too.</p>
+    <!-- page picker -->
+    <section class="box">
+      <h2>Page</h2>
+      <select id="page" aria-label="Page to edit"></select>
+      <div class="grid2" style="margin-top:6px">
+        <button class="ghost" id="newPageBtn">+ New project page</button>
+        <button class="danger" id="delPageBtn">Delete this page</button>
+      </div>
+      <div class="card hidden" id="newPageForm">
+        <label for="npTitle">Project name</label>
+        <input type="text" id="npTitle" placeholder="e.g. Coast Quest">
+        <label for="npRole">Your role(s)</label>
+        <input type="text" id="npRole" placeholder="e.g. Project Lead">
+        <label style="display:flex;gap:8px;align-items:center;color:var(--cream)"><input type="checkbox" id="npCard" checked style="width:auto"> Add a card for it on the home page</label>
+        <div class="grid2" style="margin-top:8px">
+          <button id="npCreate">Create page</button>
+          <button class="ghost" id="npCancel">Cancel</button>
+        </div>
+      </div>
+    </section>
 
-  <h2>2. Colors (optional)</h2>
-  <div class="row"><label for="c-rust">Accent (buttons, lines)</label><input type="color" id="c-rust"></div>
-  <div class="row"><label for="c-ink">Background</label><input type="color" id="c-ink"></div>
-  <div class="row"><label for="c-cream">Text</label><input type="color" id="c-cream"></div>
-  <div class="row"><label for="c-steel">Second accent</label><input type="color" id="c-steel"></div>
-  <button class="ghost full" id="dl-css">Download style.css</button>
-  <p>Color changes apply to every page, so you only download this once.</p>
+    <!-- selection -->
+    <section class="box" id="selBox">
+      <h2>Selected</h2>
+      <p id="selName">Nothing yet</p>
+      <p class="hint" id="selHint">Click text to type. Click an image, card or section to move, copy or delete it.</p>
 
-  <h2>3. Save</h2>
-  <button class="full" id="dl-page">Download this page</button>
-  <p>New images you added:</p>
-  <ul id="imgs"><li style="color:#b8b5a3">None yet</li></ul>
-  <button class="ghost full" id="dl-imgs" hidden>Download all new images</button>
-  <div id="status">No changes yet.</div>
+      <div id="fmtTools" class="hidden">
+        <div class="grid3 fmt">
+          <button class="ghost" id="bBold" title="Bold (Ctrl+B)"><b>B</b></button>
+          <button class="ghost" id="bItal" title="Italic (Ctrl+I)"><i>I</i></button>
+          <button class="ghost" id="bLink" title="Turn selected words into a link">Link</button>
+        </div>
+        <p class="hint">Highlight words first, then press B, I or Link.</p>
+      </div>
 
-  <details>
-    <summary>How do I publish my changes?</summary>
-    <ol>
-      <li>Download the page (and any new images or style.css) with the buttons above.</li>
-      <li>Open your repo on github.com.</li>
-      <li>For a page or style.css: click <b>Add file → Upload files</b>, drag the file in, and click <b>Commit changes</b>. A file with the same name replaces the old one.</li>
-      <li>For images: open the <b>images</b> folder in the repo first, then <b>Add file → Upload files</b>.</li>
-      <li>Wait 1 to 2 minutes, then refresh your site (Ctrl+Shift+R).</li>
-    </ol>
-    <p>Your browser may ask to allow multiple downloads. Say yes.</p>
-  </details>
+      <div id="imgTools" class="hidden">
+        <button class="full" id="bReplace">Replace image</button>
+        <p class="hint">Or drag a picture from your computer onto any image.</p>
+        <label for="altText">Image description (for screen readers)</label>
+        <input type="text" id="altText">
+      </div>
+
+      <div id="linkTools" class="hidden">
+        <label for="linkUrl">Link goes to</label>
+        <input type="url" id="linkUrl" list="pageList" placeholder="page.html or https://...">
+        <datalist id="pageList"></datalist>
+      </div>
+
+      <div id="videoTools" class="hidden">
+        <label for="videoUrl">YouTube or Vimeo link</label>
+        <input type="url" id="videoUrl" placeholder="https://www.youtube.com/watch?v=...">
+      </div>
+
+      <div id="galTools" class="hidden">
+        <button class="ghost full" id="bGalAdd">+ Add images to this gallery</button>
+      </div>
+
+      <div id="blockTools" class="hidden">
+        <div class="grid2" style="margin-top:8px">
+          <button class="ghost" id="bUp">↑ Move up</button>
+          <button class="ghost" id="bDown">↓ Move down</button>
+          <button class="ghost" id="bDup">Duplicate</button>
+          <button class="danger" id="bDel">Delete</button>
+        </div>
+        <button class="ghost full" id="bParent">Select the bigger area around this</button>
+      </div>
+    </section>
+
+    <!-- add -->
+    <section class="box">
+      <h2>Add to page</h2>
+      <p class="hint" id="addHint">New things go right after what you selected.</p>
+      <div class="grid2 add">
+        <button data-add="card" id="addCard">Project card</button>
+        <button data-add="step">Step section</button>
+        <button data-add="h2">Big heading</button>
+        <button data-add="p">Paragraph</button>
+        <button data-add="ul">Bullet list</button>
+        <button data-add="img">Image</button>
+        <button data-add="figure">Image + caption</button>
+        <button data-add="gallery">Image gallery</button>
+        <button data-add="video">Video</button>
+        <button data-add="facts">Facts box</button>
+        <button data-add="callout">Callout box</button>
+        <button data-add="phase">Part label</button>
+        <button data-add="story">Quote</button>
+        <button data-add="btn">Button</button>
+        <button data-add="hr">Divider line</button>
+      </div>
+    </section>
+
+    <!-- colors -->
+    <section class="box">
+      <details>
+        <summary>Site colors</summary>
+        <p class="hint">These change every page.</p>
+        <div class="row colors"><label for="c-ink">Background</label><input type="color" id="c-ink" data-var="--ink"></div>
+        <div class="row colors"><label for="c-panel">Panels</label><input type="color" id="c-panel" data-var="--panel"></div>
+        <div class="row colors"><label for="c-cream">Text</label><input type="color" id="c-cream" data-var="--cream"></div>
+        <div class="row colors"><label for="c-rust">Accent (buttons, lines)</label><input type="color" id="c-rust" data-var="--rust"></div>
+        <div class="row colors"><label for="c-steel">Second accent</label><input type="color" id="c-steel" data-var="--steel"></div>
+        <button class="ghost full" id="cReset">Reset colors</button>
+      </details>
+      <details>
+        <summary>Move images off Wix</summary>
+        <p class="hint">Some images still load from your old Wix site. If you close Wix they'll break. This copies them into your own site.</p>
+        <button class="ghost full" id="wixBtn">Find and copy Wix images</button>
+        <div id="wixMsg" class="hint"></div>
+      </details>
+      <details>
+        <summary>Help</summary>
+        <ol>
+          <li><b>Text:</b> click and type. Enter makes a new paragraph or bullet. Shift+Enter makes a line break.</li>
+          <li><b>Images:</b> click one, then Replace image. Big photos are shrunk automatically so the site stays fast.</li>
+          <li><b>Moving things:</b> click it, then Move up or Move down. To move a whole section, use "Select the bigger area".</li>
+          <li><b>More bullets, facts or tags:</b> click one and press Duplicate.</li>
+          <li><b>Switching pages</b> keeps your edits. Nothing is live until you press Publish.</li>
+          <li>After publishing, the live site updates in about a minute. Refresh with Ctrl+Shift+R (Cmd+Shift+R on Mac).</li>
+        </ol>
+        <button class="ghost full" id="forget">Disconnect GitHub on this computer</button>
+      </details>
+    </section>
+  </div>
+
+  <footer class="bar">
+    <div id="changes">No changes yet</div>
+    <div class="row">
+      <button class="ghost" id="undo" disabled>Undo</button>
+      <button id="publish" disabled>Publish</button>
+    </div>
+    <button class="ghost full hidden" id="download">Download changed files instead</button>
+    <div id="status"></div>
+  </footer>
 </aside>
 
 <main>
-  <div id="warn">
-    <h1>Open the editor from your live site</h1>
-    <p>This editor can only edit pages when it's opened from the same web address as your site, like <b>https://smelos20.github.io/SofiaMeloStevens/editor.html</b>. Opening it as a file on your computer won't work.</p>
+  <div class="viewbar">
+    <button class="ghost on" id="vDesk">Computer</button>
+    <button class="ghost" id="vPhone">Phone</button>
+    <span class="spacer"></span>
+    <span id="pageLabel"></span>
   </div>
-  <iframe id="frame" title="Page being edited"></iframe>
+  <div class="stage"><iframe id="frame" title="Page preview"></iframe></div>
+  <div id="loading">Loading…</div>
 </main>
 
+<input type="file" id="filePick" accept="image/*" class="hidden">
+
 <script>
-// Add new pages here as [name, file]
-const PAGES = [
-  ["Home", "index.html"],
-  ["About", "about.html"],
-  ["Resume", "resume.html"],
-  ["Coast Quest", "coast-quest.html"],
-  ["Archeomancy", "archeomancy.html"],
-  ["Frozen Letters", "frozen-letters.html"],
-  ["Bathysphere Dock", "bathysphere.html"]
-];
-const TEXT_SEL = "h1,h2,h3,p,li,figcaption,.role,.go,.fact,a.btn,footer .social a";
+(() => {
+"use strict";
 
-const $ = (id) => document.getElementById(id);
-const sel = $("page"), frame = $("frame"), statusEl = $("status");
-const newImages = new Map(); // path -> {blob, url}
-let counter = 1, dirty = false, cssText = "", colors = {};
-
-PAGES.forEach(([n, f]) => { const o = document.createElement("option"); o.value = f; o.textContent = n; sel.appendChild(o); });
-let currentPage = sel.value;
-
-function setDirty(v = true) {
-  dirty = v;
-  statusEl.textContent = v ? "You have unsaved changes on this page. Use Download this page." : "No changes yet.";
-  statusEl.className = v ? "dirty" : "";
+/* ---------- where the site lives ---------- */
+const DEFAULT = { owner: "smelos20", repo: "SofiaMeloStevens", branch: "main" };
+const CFG = { ...DEFAULT };
+if (location.hostname.endsWith(".github.io")) {
+  CFG.owner = location.hostname.split(".")[0];
+  const seg = location.pathname.split("/").filter(Boolean)[0];
+  if (seg && !seg.endsWith(".html")) CFG.repo = seg;
 }
-window.addEventListener("beforeunload", (e) => { if (dirty) { e.preventDefault(); e.returnValue = ""; } });
+const SITE = `https://${CFG.owner}.github.io/${CFG.repo}/`;
+const API = "https://api.github.com";
+const $ = id => document.getElementById(id);
+$("liveLink").href = SITE;
+$("repoName").textContent = CFG.repo;
 
-sel.addEventListener("change", () => {
-  if (dirty && !confirm("You have changes on this page that you haven't downloaded. Switch pages anyway?")) { sel.value = currentPage; return; }
-  currentPage = sel.value; setDirty(false); loadPage();
+/* ---------- small storage helpers ---------- */
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch {} },
+  del(k) { try { localStorage.removeItem(k); } catch {} }
+};
+let token = store.get("ed-token") || "";
+
+/* ---------- state ---------- */
+const files = new Map();     // path -> { baseline, current, isNew, deleted, exists }
+const uploads = new Map();   // "images/x.jpg" -> { blob, url }
+let pagePaths = [];
+let current = null;          // path of the page being edited
+let doc = null;              // iframe document
+let sel = { el: null, block: null, img: null, link: null };
+let history = [];
+let lastRange = null;
+let css = { baseline: "", current: "" };
+let dirtyTimer = null, snapTimer = null, typingSnap = false;
+
+/* ---------- GitHub API ---------- */
+async function gh(path, opts = {}) {
+  const headers = { Accept: "application/vnd.github+json" };
+  if (token) headers.Authorization = "Bearer " + token;
+  if (opts.body) headers["Content-Type"] = "application/json";
+  const res = await fetch(API + path, { method: opts.method || "GET", headers, body: opts.body ? JSON.stringify(opts.body) : undefined, cache: "no-store" });
+  if (!res.ok) {
+    let msg = res.status + "";
+    try { msg = (await res.json()).message || msg; } catch {}
+    const e = new Error(msg); e.status = res.status; throw e;
+  }
+  return res.status === 204 ? null : res.json();
+}
+const repoPath = p => `/repos/${CFG.owner}/${CFG.repo}${p}`;
+function b64ToText(b64) {
+  const bin = atob(b64.replace(/\n/g, ""));
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
+async function blobToB64(blob) {
+  const bytes = new Uint8Array(await blob.arrayBuffer());
+  let bin = "";
+  for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+  return btoa(bin);
+}
+async function readRepoFile(path) {
+  const r = await gh(repoPath(`/contents/${encodeURI(path)}?ref=${CFG.branch}&t=${Date.now()}`));
+  return b64ToText(r.content);
+}
+function friendlyError(e) {
+  if (e.status === 401) return "GitHub didn't accept your key. It may have expired. Make a new one and connect again.";
+  if (e.status === 403 && /rate limit/i.test(e.message)) return "GitHub is limiting requests right now. Connect your key (it raises the limit) or wait a few minutes.";
+  if (e.status === 403 || e.status === 404) return "Your key can't reach the " + CFG.repo + " repo. Check that the key has that repo selected and Contents set to Read and write.";
+  if (e instanceof TypeError) return "Couldn't reach GitHub. Check your internet connection.";
+  return "Something went wrong: " + e.message;
+}
+
+/* ---------- setup ---------- */
+function showSetup() {
+  $("setup").classList.toggle("hidden", !!token);
+  $("download").classList.toggle("hidden", !!token);
+  refreshChanges();
+}
+$("connect").onclick = async () => {
+  const t = $("token").value.trim();
+  if (!t) { $("setupMsg").innerHTML = '<span class="bad">Paste your key first.</span>'; return; }
+  token = t;
+  $("setupMsg").textContent = "Checking…";
+  try {
+    const r = await gh(repoPath(""));
+    if (r.permissions && !r.permissions.push) throw Object.assign(new Error("no push"), { status: 403 });
+    store.set("ed-token", t);
+    $("setupMsg").innerHTML = '<span class="ok">Connected.</span>';
+    $("token").value = "";
+    showSetup();
+    status("Connected to GitHub. You can publish now.", "ok");
+  } catch (e) {
+    token = "";
+    $("setupMsg").innerHTML = '<span class="bad">' + friendlyError(e) + "</span>";
+  }
+};
+$("forget").onclick = () => { store.del("ed-token"); token = ""; showSetup(); status("Disconnected on this computer."); };
+
+/* ---------- status + changes ---------- */
+function status(msg, cls) { $("status").innerHTML = msg ? `<span class="${cls || ""}">${msg}</span>` : ""; }
+function syncCurrent() {
+  if (doc && current && files.has(current)) files.get(current).current = serialize(doc);
+}
+function changedList() {
+  syncCurrent();
+  const out = [];
+  for (const [p, f] of files) {
+    if (f.deleted) { if (f.exists) out.push({ path: p, kind: "deleted" }); continue; }
+    if (f.isNew) out.push({ path: p, kind: "new" });
+    else if (f.current !== f.baseline) out.push({ path: p, kind: "edited" });
+  }
+  if (css.current !== css.baseline) out.push({ path: "style.css", kind: "colors" });
+  return out;
+}
+function refreshChanges() {
+  const list = changedList();
+  const el = $("changes");
+  if (!list.length) el.textContent = "No changes yet";
+  else el.innerHTML = "<b>Not published yet:</b> " + list.map(c => c.path + (c.kind === "new" ? " (new)" : c.kind === "deleted" ? " (delete)" : "")).join(", ");
+  $("publish").disabled = !list.length || !token;
+  $("publish").title = token ? "" : "Connect to GitHub first (top of this panel)";
+  $("download").disabled = !list.length;
+  $("undo").disabled = !history.length;
+}
+function markDirty() {
+  clearTimeout(dirtyTimer);
+  dirtyTimer = setTimeout(refreshChanges, 400);
+}
+window.addEventListener("beforeunload", e => {
+  if (changedList().length) { e.preventDefault(); e.returnValue = ""; }
 });
-function loadPage() { frame.src = currentPage + "?edit=" + Date.now(); }
 
-/* ---------- colors ---------- */
-function hex2rgb(h) { h = h.replace("#", ""); if (h.length === 3) h = h.split("").map(c => c + c).join(""); return [0, 2, 4].map(i => parseInt(h.substr(i, 2), 16)); }
-function rgb2hex(r) { return "#" + r.map(v => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, "0")).join(""); }
-function mix(a, b, t) { const x = hex2rgb(a), y = hex2rgb(b); return rgb2hex(x.map((v, i) => v + (y[i] - v) * t)); }
-function derived() {
-  return {
-    rust: colors.rust, "rust-bright": mix(colors.rust, "#ffffff", 0.22),
-    ink: colors.ink, panel: mix(colors.ink, "#ffffff", 0.07), line: mix(colors.ink, "#ffffff", 0.14),
-    cream: colors.cream, steel: colors.steel
-  };
+/* ---------- page list ---------- */
+async function loadPageList() {
+  let names;
+  try {
+    const r = await gh(repoPath(`/contents/?ref=${CFG.branch}&t=${Date.now()}`));
+    names = r.filter(x => x.type === "file" && x.name.endsWith(".html") && x.name !== "editor.html").map(x => x.name);
+  } catch (e) {
+    status(friendlyError(e), "bad");
+    names = ["index.html"];
+  }
+  pagePaths = names;
+  for (const n of names) if (!files.has(n)) files.set(n, { exists: true });
+  fillPageSelect();
 }
-function applyColors() {
-  const doc = frame.contentDocument; if (!doc || !doc.head) return;
-  let st = doc.getElementById("__edcolors");
-  if (!st) { st = doc.createElement("style"); st.id = "__edcolors"; doc.head.appendChild(st); }
-  const d = derived();
-  st.textContent = ":root{" + Object.entries(d).map(([k, v]) => "--" + k + ":" + v).join(";") + "}";
+function pageTitle(p) {
+  const f = files.get(p);
+  const html = f && (f.current || f.baseline);
+  const m = html && html.match(/<title>([^<|]*)/i);
+  if (p === "index.html") return "Home (index.html)";
+  return (m ? m[1].trim() : p.replace(".html", "")) + " (" + p + ")";
 }
-function readVar(name) { const m = cssText.match(new RegExp("--" + name + ":\\s*(#[0-9a-fA-F]{3,8})")); return m ? m[1] : null; }
-fetch("style.css?" + Date.now()).then(r => r.text()).then(t => {
-  cssText = t;
-  ["rust", "ink", "cream", "steel"].forEach(k => {
-    const v = readVar(k) || "#000000"; colors[k] = v; $("c-" + k).value = v;
-    $("c-" + k).addEventListener("input", (e) => { colors[k] = e.target.value; applyColors(); statusEl.textContent = "Colors changed. Download style.css to keep them."; statusEl.className = "dirty"; });
-  });
-}).catch(() => {});
-$("dl-css").addEventListener("click", () => {
-  if (!cssText) { alert("Couldn't load style.css. Open the editor from your live site."); return; }
-  let out = cssText;
-  Object.entries(derived()).forEach(([k, v]) => { out = out.replace(new RegExp("(--" + k + ":\\s*)#[0-9a-fA-F]{3,8}"), "$1" + v); });
-  save(new Blob([out], { type: "text/css" }), "style.css");
-});
+function fillPageSelect() {
+  const s = $("page");
+  const all = [...files.keys()].filter(p => !files.get(p).deleted);
+  all.sort((a, b) => (a === "index.html" ? -1 : b === "index.html" ? 1 : a.localeCompare(b)));
+  s.innerHTML = all.map(p => `<option value="${p}">${pageTitle(p)}</option>`).join("");
+  if (current) s.value = current;
+  $("pageList").innerHTML = all.map(p => `<option value="${p}">`).join("") + '<option value="mailto:sofiamelos.art@gmail.com">';
+}
+$("page").onchange = () => openPage($("page").value);
 
-/* ---------- editing ---------- */
-frame.addEventListener("load", setup);
-function setup() {
-  let doc;
-  try { doc = frame.contentDocument; void doc.body; } catch (e) { $("warn").classList.add("on"); return; }
-  if (!doc || !doc.body) { $("warn").classList.add("on"); return; }
-  $("warn").classList.remove("on");
-
-  const st = doc.createElement("style"); st.id = "__ed";
-  st.textContent =
-    "[data-ed]{cursor:text}[data-ed]:hover{outline:2px dashed rgba(226,104,59,.7);outline-offset:3px}" +
-    "[data-ed]:focus{outline:2px solid #e2683b;outline-offset:3px}" +
-    "img[data-ed-img]{cursor:pointer}img[data-ed-img]:hover{outline:4px solid #e2683b;outline-offset:-4px}" +
-    ".cover{cursor:pointer}";
-  doc.head.appendChild(st);
-
-  doc.querySelectorAll(TEXT_SEL).forEach((el) => {
-    if (el.closest("nav") || el.closest(".brand")) return;
-    el.setAttribute("contenteditable", "true");
-    el.setAttribute("data-ed", "1");
-    el.addEventListener("input", () => setDirty(true));
-    el.addEventListener("paste", (e) => {
-      e.preventDefault();
-      const t = (e.clipboardData || window.clipboardData).getData("text/plain");
-      doc.execCommand("insertText", false, t);
-    });
-    el.addEventListener("keydown", (e) => { if (e.key === " ") e.stopPropagation(); }, true);
+/* ---------- open + render ---------- */
+async function getPageHtml(p) {
+  const f = files.get(p) || {};
+  if (f.current != null) return f.current;
+  const raw = await readRepoFile(p);
+  f.raw = raw; files.set(p, f);
+  return raw;
+}
+async function openPage(p) {
+  syncCurrent();
+  $("loading").classList.remove("hidden");
+  $("loading").textContent = "Loading " + p + "…";
+  try {
+    const html = await getPageHtml(p);
+    current = p; history = [];
+    await render(html);
+    const f = files.get(p);
+    if (f.baseline == null) { f.baseline = serialize(doc); f.current = f.baseline; }
+    $("pageLabel").textContent = p;
+    $("page").value = p;
+    $("delPageBtn").disabled = p === "index.html";
+    $("addCard").classList.toggle("hidden", !doc.querySelector(".wall"));
+    select(null);
+    refreshChanges();
+    $("loading").classList.add("hidden");
+  } catch (e) {
+    $("loading").textContent = friendlyError(e);
+  }
+}
+function render(html) {
+  return new Promise(resolve => {
+    const frame = $("frame");
+    const prepared = html.replace(/<head([^>]*)>/i, `<head$1><base href="${SITE}" data-ed>`);
+    frame.onload = () => { doc = frame.contentDocument; instrument(); resolve(); };
+    frame.srcdoc = prepared;
   });
-  doc.querySelectorAll("a").forEach((a) => a.addEventListener("click", (e) => e.preventDefault(), true));
-  doc.querySelectorAll("img").forEach((img) => {
-    img.setAttribute("data-ed-img", "1");
-    img.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); pickImage(img); });
-  });
-  doc.querySelectorAll(".cover").forEach((c) => c.addEventListener("click", (e) => {
-    if (e.target.closest("[data-ed]") || e.target.closest("a")) return;
-    const im = c.querySelector("img"); if (im) pickImage(im);
-  }));
-  applyColors();
-  // re-show images already replaced earlier in this session
-  doc.querySelectorAll("img").forEach((img) => {
+}
+
+/* ---------- making the page editable ---------- */
+const TEXT = "h1,h2,h3,h4,p,li,figcaption,.fact,.pin span,.tags span,.phase,a.btn,a.back,.go,.social a,footer p";
+const CONTAINERS = "main,section,.step,.wall,.gallery,.facts,ul,ol,.about,.about > div,.cover .copy,.cta,.callout,.tags";
+const FLOW = "main:not(.flush),#work,.step,.about > div,.callout";
+const EDITOR_CSS = `
+  [contenteditable]{outline:1px dashed transparent;outline-offset:3px;cursor:text}
+  [contenteditable]:hover{outline-color:rgba(91,147,209,.7)}
+  [contenteditable]:focus{outline:2px solid #5b93d1;outline-offset:3px}
+  .ed-sel{outline:2px solid #e2683b !important;outline-offset:6px;border-radius:4px}
+  .ed-img{outline:3px solid #5b93d1 !important;outline-offset:2px}
+  .ed-drop{outline:4px dashed #a3b650 !important}
+  img{cursor:pointer}
+  .video iframe{pointer-events:none}
+  .tile:hover .art img{transform:none}
+  [contenteditable]:empty::before{content:"Type here…";opacity:.45}
+`;
+function instrument() {
+  // live colors + current stylesheet, so the preview always matches what will be published
+  const link = doc.querySelector('link[rel="stylesheet"][href$="style.css"]');
+  if (link && css.current) {
+    link.disabled = true;
+    const st = doc.createElement("style"); st.setAttribute("data-ed", "css"); st.textContent = css.current;
+    link.after(st);
+  }
+  const ed = doc.createElement("style"); ed.setAttribute("data-ed", ""); ed.textContent = EDITOR_CSS;
+  doc.head.appendChild(ed);
+  makeEditable(doc.body);
+  // show images that were uploaded but not published yet
+  doc.querySelectorAll("img").forEach(img => {
     const src = img.getAttribute("src");
-    if (newImages.has(src)) { img.setAttribute("data-ed-orig", src); img.setAttribute("data-ed-path", src); img.src = newImages.get(src).url; }
+    if (uploads.has(src)) { img.setAttribute("data-ed-src", src); img.src = uploads.get(src).url; }
+  });
+  if (!doc.edBound) bindDoc();
+}
+function makeEditable(root) {
+  root.querySelectorAll(TEXT).forEach(el => {
+    if (el.closest("header")) return;
+    if (el.parentElement && el.parentElement.closest("[contenteditable]")) return;
+    el.setAttribute("contenteditable", "true");
+    el.setAttribute("spellcheck", "true");
   });
 }
+function serialize(d) {
+  const root = d.documentElement.cloneNode(true);
+  root.querySelectorAll("[data-ed]").forEach(n => n.remove());
+  root.querySelectorAll("link[disabled]").forEach(n => n.removeAttribute("disabled"));
+  root.querySelectorAll("[contenteditable]").forEach(n => { n.removeAttribute("contenteditable"); n.removeAttribute("spellcheck"); });
+  root.querySelectorAll(".ed-sel,.ed-img,.ed-drop").forEach(n => { n.classList.remove("ed-sel", "ed-img", "ed-drop"); if (!n.className) n.removeAttribute("class"); });
+  root.querySelectorAll("img[data-ed-src]").forEach(n => { n.setAttribute("src", n.getAttribute("data-ed-src")); n.removeAttribute("data-ed-src"); });
+  return "<!doctype html>\n" + root.outerHTML;
+}
+
+/* ---------- events inside the page ---------- */
+function bindDoc() {
+  // the iframe document is replaced on every render, so bind each time
+  doc.edBound = true;
+  doc.addEventListener("click", e => {
+    const a = e.target.closest("a");
+    if (a) e.preventDefault();
+    select(e.target);
+  }, true);
+  doc.addEventListener("input", () => {
+    if (!typingSnap) { typingSnap = true; } // text edits get their own undo step below
+    clearTimeout(snapTimer); snapTimer = setTimeout(() => { typingSnap = false; }, 1500);
+    markDirty();
+  });
+  doc.addEventListener("beforeinput", () => { if (!typingSnap) snapshot(); });
+  doc.addEventListener("keydown", onKey);
+  doc.addEventListener("paste", e => {
+    const t = e.target.closest && e.target.closest("[contenteditable]");
+    if (!t) return;
+    const files = [...(e.clipboardData.files || [])].filter(f => f.type.startsWith("image/"));
+    if (files.length && sel.img) { e.preventDefault(); replaceImage(sel.img, files[0]); return; }
+    e.preventDefault();
+    doc.execCommand("insertText", false, e.clipboardData.getData("text/plain"));
+  });
+  doc.addEventListener("selectionchange", () => {
+    const s = doc.getSelection();
+    if (s && s.rangeCount && !s.isCollapsed) lastRange = s.getRangeAt(0).cloneRange();
+  });
+  doc.addEventListener("dragover", e => {
+    const img = dropTarget(e.target);
+    if (img && e.dataTransfer.types.includes("Files")) { e.preventDefault(); doc.querySelectorAll(".ed-drop").forEach(n => n.classList.remove("ed-drop")); img.classList.add("ed-drop"); }
+  });
+  doc.addEventListener("dragleave", e => { const img = dropTarget(e.target); if (img) img.classList.remove("ed-drop"); });
+  doc.addEventListener("drop", e => {
+    const img = dropTarget(e.target);
+    doc.querySelectorAll(".ed-drop").forEach(n => n.classList.remove("ed-drop"));
+    if (!img) return;
+    e.preventDefault();
+    const f = [...e.dataTransfer.files].find(f => f.type.startsWith("image/"));
+    if (f) { select(img); replaceImage(img, f); }
+  });
+}
+function dropTarget(t) {
+  if (!t || !t.closest) return null;
+  if (t.tagName === "IMG") return t;
+  const b = t.closest(".tile,figure,.cover");
+  return b ? b.querySelector("img") : null;
+}
+function onKey(e) {
+  const el = e.target.closest && e.target.closest("[contenteditable]");
+  if (!el) return;
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    const tag = el.tagName;
+    const inCard = el.closest(".tile,.facts,.tags,figure");
+    if ((tag === "LI" || (tag === "P" && !inCard && !el.querySelector("a.btn")))) {
+      snapshot();
+      const n = doc.createElement(tag);
+      if (tag === "P" && el.classList.contains("story")) n.className = "story";
+      // carry text after the caret into the new line
+      const s = doc.getSelection();
+      if (s.rangeCount) {
+        const r = s.getRangeAt(0); r.deleteContents();
+        const after = doc.createRange(); after.setStart(r.endContainer, r.endOffset); after.setEndAfter(el.lastChild || el);
+        n.appendChild(after.extractContents());
+      }
+      n.setAttribute("contenteditable", "true"); n.setAttribute("spellcheck", "true");
+      el.after(n);
+      placeCaret(n, true);
+      select(n);
+      markDirty();
+    }
+  } else if (e.key === "Backspace" && el.textContent === "" && !el.querySelector("img")) {
+    const prev = el.previousElementSibling;
+    if ((el.tagName === "LI" || el.tagName === "P") && prev && prev.tagName === el.tagName && prev.isContentEditable) {
+      e.preventDefault(); snapshot();
+      el.remove(); placeCaret(prev, false); select(prev); markDirty();
+    }
+  }
+}
+function placeCaret(el, atStart) {
+  el.focus();
+  const r = doc.createRange(); r.selectNodeContents(el); r.collapse(atStart);
+  const s = doc.getSelection(); s.removeAllRanges(); s.addRange(r);
+}
+
+/* ---------- selection ---------- */
+function blockOf(el) {
+  let n = el;
+  while (n && n !== doc.body && n.nodeType === 1) {
+    if (n.parentElement && n.parentElement.matches(CONTAINERS) && !n.matches("main,section#work,header,footer")) return n;
+    n = n.parentElement;
+  }
+  return null;
+}
+function biggerBlock(b) {
+  let n = b.parentElement;
+  while (n && n !== doc.body) {
+    if (n.parentElement && n.parentElement.matches(CONTAINERS) && !n.matches("main,section#work")) return n;
+    n = n.parentElement;
+  }
+  return null;
+}
+function describe(el) {
+  if (!el) return "Nothing yet";
+  const m = [
+    [".tile", "Project card"], [".cover", "Top banner"], [".step", "Step section"], [".gallery", "Image gallery"],
+    ["figure", "Image with caption"], [".facts", "Facts box"], [".fact", "Fact"], [".callout", "Callout box"],
+    [".video", "Video"], ["hr", "Divider line"], [".tags", "Tags"], [".tags span", "Tag"], [".phase", "Part label"],
+    ["ul,ol", "Bullet list"], ["li", "Bullet point"], [".story", "Quote"], ["h1", "Page title"], ["h2,h3,h4", "Heading"],
+    [".lead", "Intro text"], ["img", "Image"], ["a.btn", "Button"], [".cta", "Buttons"], ["p", "Paragraph"], [".about > div", "Text column"]
+  ];
+  for (const [q, name] of m) if (el.matches(q)) return name;
+  return "Section";
+}
+function clearMarks() { if (doc) doc.querySelectorAll(".ed-sel,.ed-img").forEach(n => n.classList.remove("ed-sel", "ed-img")); }
+function select(target, blockOverride) {
+  clearMarks();
+  if (!target || !doc || !target.closest) { sel = { el: null, block: null, img: null, link: null }; return paintSel(); }
+  const img = target.tagName === "IMG" ? target : null;
+  const block = blockOverride || blockOf(target);
+  sel = {
+    el: target,
+    block,
+    img: img || (block && block.matches(".tile,figure") ? block.querySelector("img") : null),
+    link: target.closest("a") || (block && block.tagName === "A" ? block : null) || (block && block.querySelector && block.matches("p") ? block.querySelector("a.btn") : null)
+  };
+  if (blockOverride) { sel.img = block.tagName === "IMG" ? block : (block.matches(".tile,figure") ? block.querySelector("img") : null); sel.link = block.tagName === "A" ? block : null; sel.el = block; }
+  if (block) block.classList.add("ed-sel");
+  if (sel.img) sel.img.classList.add("ed-img");
+  paintSel();
+}
+function paintSel() {
+  const { el, block, img, link } = sel;
+  const shown = block || el;
+  $("selName").textContent = shown ? describe(img && !block ? img : (block || el)) + (img && block && block !== img ? " (image selected)" : "") : "Nothing yet";
+  $("selHint").classList.toggle("hidden", !!shown);
+  const editable = el && el.closest && el.closest("[contenteditable]");
+  $("fmtTools").classList.toggle("hidden", !editable);
+  $("imgTools").classList.toggle("hidden", !img);
+  if (img) $("altText").value = img.getAttribute("alt") || "";
+  $("linkTools").classList.toggle("hidden", !link);
+  if (link) $("linkUrl").value = link.getAttribute("href") || "";
+  const video = block && (block.matches(".video") ? block : block.querySelector && block.querySelector(".video"));
+  $("videoTools").classList.toggle("hidden", !video);
+  if (video) $("videoUrl").value = video.querySelector("iframe").getAttribute("src") || "";
+  const gal = el && el.closest && el.closest(".gallery");
+  $("galTools").classList.toggle("hidden", !gal);
+  $("blockTools").classList.toggle("hidden", !block);
+  if (block) {
+    $("bUp").disabled = !block.previousElementSibling || block.previousElementSibling.matches("[data-ed],.back");
+    $("bDown").disabled = !block.nextElementSibling;
+    $("bParent").disabled = !biggerBlock(block);
+  }
+}
+$("bParent").onclick = () => { const b = sel.block && biggerBlock(sel.block); if (b) { select(b, b); b.scrollIntoView({ block: "nearest", behavior: "smooth" }); } };
+
+/* ---------- undo ---------- */
+function snapshot() {
+  if (!doc) return;
+  history.push(serialize(doc));
+  if (history.length > 60) history.shift();
+  $("undo").disabled = false;
+}
+$("undo").onclick = () => {
+  if (!history.length) return;
+  const html = history.pop();
+  const parsed = new DOMParser().parseFromString(html, "text/html");
+  const y = doc.defaultView.scrollY;
+  doc.body.innerHTML = parsed.body.innerHTML;
+  makeEditable(doc.body);
+  doc.querySelectorAll("img").forEach(img => { const s = img.getAttribute("src"); if (uploads.has(s)) { img.setAttribute("data-ed-src", s); img.src = uploads.get(s).url; } });
+  doc.defaultView.scrollTo(0, y);
+  typingSnap = false;
+  select(null);
+  refreshChanges();
+};
+
+/* ---------- block actions ---------- */
+function afterStructure(container) {
+  const wall = container && container.closest ? container.closest(".wall") : null;
+  if (wall) reclassTiles(wall);
+  markDirty(); paintSel();
+}
+function reclassTiles(wall) {
+  [...wall.children].filter(n => n.classList.contains("tile")).forEach((t, i) => {
+    t.classList.remove("t1", "t2", "t3", "t4"); t.classList.add("t" + (i % 4 + 1));
+  });
+}
+$("bUp").onclick = () => { const b = sel.block, p = b && b.previousElementSibling; if (!p) return; snapshot(); p.before(b); afterStructure(b.parentElement); b.scrollIntoView({ block: "nearest", behavior: "smooth" }); };
+$("bDown").onclick = () => { const b = sel.block, n = b && b.nextElementSibling; if (!n) return; snapshot(); n.after(b); afterStructure(b.parentElement); b.scrollIntoView({ block: "nearest", behavior: "smooth" }); };
+$("bDup").onclick = () => {
+  const b = sel.block; if (!b) return; snapshot();
+  const c = b.cloneNode(true); c.classList.remove("ed-sel"); c.querySelectorAll(".ed-img").forEach(n => n.classList.remove("ed-img"));
+  b.after(c); afterStructure(c.parentElement); select(c, c);
+};
+$("bDel").onclick = () => {
+  const b = sel.block; if (!b) return;
+  if (b.matches(".step,.tile,.gallery,section,.callout") && !confirm("Delete this whole " + describe(b).toLowerCase() + "? (You can press Undo.)")) return;
+  snapshot();
+  const parent = b.parentElement, next = b.nextElementSibling || b.previousElementSibling;
+  b.remove(); afterStructure(parent);
+  if (next && blockOf(next) === next) select(next, next); else select(null);
+};
+
+/* ---------- text formatting ---------- */
+function restoreRange() {
+  doc.defaultView.focus();
+  if (lastRange) { const s = doc.getSelection(); s.removeAllRanges(); s.addRange(lastRange); }
+}
+[["bBold", "bold"], ["bItal", "italic"]].forEach(([id, cmd]) => {
+  $(id).onmousedown = e => e.preventDefault();
+  $(id).onclick = () => { restoreRange(); snapshot(); doc.execCommand(cmd); markDirty(); };
+});
+$("bLink").onmousedown = e => e.preventDefault();
+$("bLink").onclick = () => {
+  if (!lastRange || lastRange.collapsed) { status("Highlight some words first, then press Link."); return; }
+  const url = prompt("Where should this link go? (a page like about.html, or a full web address)", "https://");
+  if (!url) return;
+  restoreRange(); snapshot(); doc.execCommand("createLink", false, url.trim()); markDirty();
+};
+
+/* ---------- links, alt text, video ---------- */
+$("altText").oninput = () => { if (sel.img) { sel.img.setAttribute("alt", $("altText").value); markDirty(); } };
+$("linkUrl").onchange = () => { if (sel.link) { snapshot(); sel.link.setAttribute("href", $("linkUrl").value.trim()); markDirty(); } };
+function videoEmbed(url) {
+  url = url.trim();
+  let m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([\w-]{6,})/);
+  if (m) return "https://www.youtube-nocookie.com/embed/" + m[1];
+  m = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+  if (m) return "https://player.vimeo.com/video/" + m[1];
+  return null;
+}
+$("videoUrl").onchange = () => {
+  const block = sel.block; const v = block && (block.matches(".video") ? block : block.querySelector(".video"));
+  if (!v) return;
+  const src = videoEmbed($("videoUrl").value);
+  if (!src) { status("That doesn't look like a YouTube or Vimeo link.", "bad"); return; }
+  snapshot(); v.querySelector("iframe").setAttribute("src", src); markDirty(); status("");
+};
 
 /* ---------- images ---------- */
-function pickImage(img) {
-  const input = document.createElement("input");
-  input.type = "file"; input.accept = "image/*";
-  input.onchange = () => { if (input.files[0]) processImage(img, input.files[0]); };
-  input.click();
-}
-function processImage(img, file) {
-  if (!img.hasAttribute("data-ed-orig")) img.setAttribute("data-ed-orig", img.getAttribute("src"));
-  let path = img.getAttribute("data-ed-path");
-  if (!path) {
-    const orig = img.getAttribute("data-ed-orig");
-    path = /^images\/[^?#]+\.(jpe?g|png)$/i.test(orig) ? orig : "images/new-" + (counter++) + ".jpg";
+function slug(s) { return (s || "image").toLowerCase().replace(/\.[a-z0-9]+$/, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40) || "image"; }
+async function processImage(file) {
+  const keep = /svg|gif/.test(file.type);
+  let blob = file, ext = (file.name.match(/\.([a-z0-9]+)$/i) || [, "jpg"])[1].toLowerCase();
+  if (!keep) {
+    const url = URL.createObjectURL(file);
+    const im = await new Promise((ok, bad) => { const i = new Image(); i.onload = () => ok(i); i.onerror = bad; i.src = url; });
+    URL.revokeObjectURL(url);
+    const MAX = 2400;
+    if (im.naturalWidth > MAX || file.size > 1.5 * 1024 * 1024) {
+      const scale = Math.min(1, MAX / im.naturalWidth);
+      const c = document.createElement("canvas");
+      c.width = Math.round(im.naturalWidth * scale); c.height = Math.round(im.naturalHeight * scale);
+      const g = c.getContext("2d"); g.fillStyle = "#07131c"; g.fillRect(0, 0, c.width, c.height);
+      g.drawImage(im, 0, 0, c.width, c.height);
+      blob = await new Promise(ok => c.toBlob(ok, "image/jpeg", 0.88));
+      ext = "jpg";
+    }
   }
-  const isPng = /\.png$/i.test(path);
-  const url0 = URL.createObjectURL(file);
-  const im = new Image();
-  im.onload = () => {
-    const max = 1800, s = Math.min(1, max / Math.max(im.width, im.height));
-    const c = document.createElement("canvas");
-    c.width = Math.round(im.width * s); c.height = Math.round(im.height * s);
-    const ctx = c.getContext("2d");
-    if (!isPng) { ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, c.width, c.height); }
-    ctx.drawImage(im, 0, 0, c.width, c.height);
-    c.toBlob((blob) => {
-      URL.revokeObjectURL(url0);
-      const old = newImages.get(path); if (old) URL.revokeObjectURL(old.url);
-      const url = URL.createObjectURL(blob);
-      newImages.set(path, { blob, url });
-      img.setAttribute("data-ed-path", path);
-      img.src = url; img.removeAttribute("srcset");
-      const alt = prompt("Short description of this image, for people using screen readers (optional):", img.getAttribute("alt") || "");
-      if (alt !== null) img.setAttribute("alt", alt);
-      renderImages(); setDirty(true);
-    }, isPng ? "image/png" : "image/jpeg", 0.86);
-  };
-  im.onerror = () => { alert("That file couldn't be read as an image. Try a JPG or PNG."); };
-  im.src = url0;
+  const path = `images/${slug(file.name)}-${Math.random().toString(36).slice(2, 7)}.${ext}`;
+  const url = URL.createObjectURL(blob);
+  uploads.set(path, { blob, url });
+  return { path, url };
 }
-function renderImages() {
-  const ul = $("imgs"); ul.innerHTML = "";
-  if (!newImages.size) { ul.innerHTML = '<li style="color:#b8b5a3">None yet</li>'; $("dl-imgs").hidden = true; return; }
-  $("dl-imgs").hidden = false;
-  newImages.forEach((v, path) => {
-    const li = document.createElement("li");
-    const span = document.createElement("span"); span.textContent = path;
-    const b = document.createElement("button"); b.className = "ghost"; b.textContent = "Download";
-    b.onclick = () => save(v.blob, path.split("/").pop());
-    li.append(span, b); ul.appendChild(li);
+async function replaceImage(img, file) {
+  status("Adding image…");
+  try {
+    const { path, url } = await processImage(file);
+    snapshot();
+    img.removeAttribute("srcset");
+    img.setAttribute("data-ed-src", path);
+    img.src = url;
+    if (!img.getAttribute("alt")) img.setAttribute("alt", file.name.replace(/\.[^.]+$/, "").replace(/[-_]+/g, " "));
+    markDirty(); paintSel();
+    status("Image added. Remember to Publish.", "ok");
+  } catch { status("That file couldn't be opened as an image.", "bad"); }
+}
+function pickFiles(multiple) {
+  return new Promise(resolve => {
+    const inp = $("filePick");
+    inp.multiple = !!multiple; inp.value = "";
+    inp.onchange = () => resolve([...inp.files]);
+    inp.click();
   });
 }
-$("dl-imgs").addEventListener("click", () => {
-  let i = 0; newImages.forEach((v, path) => { setTimeout(() => save(v.blob, path.split("/").pop()), i++ * 500); });
-});
-
-/* ---------- saving ---------- */
-function save(blob, name) {
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob); a.download = name;
-  document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+$("bReplace").onclick = async () => { const img = sel.img; if (!img) return; const [f] = await pickFiles(false); if (f) replaceImage(img, f); };
+async function fillGallery(gal, files) {
+  const empties = [...gal.querySelectorAll("img")].filter(i => /placeholder\.svg$/.test(i.getAttribute("src") || ""));
+  for (const f of files) {
+    let img = empties.shift();
+    if (!img) { img = doc.createElement("img"); img.setAttribute("loading", "lazy"); img.setAttribute("alt", ""); gal.appendChild(img); }
+    await replaceImage(img, f);
+  }
+  empties.forEach(i => i.remove());
+  markDirty();
 }
-$("dl-page").addEventListener("click", () => {
-  const doc = frame.contentDocument; if (!doc || !doc.documentElement) return;
-  const clone = doc.documentElement.cloneNode(true);
-  ["__ed", "__edcolors"].forEach((id) => { const n = clone.querySelector("#" + id); if (n) n.remove(); });
-  clone.querySelectorAll("[data-ed]").forEach((e) => { e.removeAttribute("contenteditable"); e.removeAttribute("data-ed"); });
-  clone.querySelectorAll("[data-ed-img]").forEach((i) => {
-    const p = i.getAttribute("data-ed-path"); if (p) i.setAttribute("src", p);
-    ["data-ed-img", "data-ed-path", "data-ed-orig"].forEach((a) => i.removeAttribute(a));
-  });
-  save(new Blob(["<!doctype html>\n" + clone.outerHTML], { type: "text/html" }), currentPage);
-  setDirty(false);
-  statusEl.textContent = "Downloaded " + currentPage + ". Upload it to GitHub to publish.";
+$("bGalAdd").onclick = async () => {
+  const gal = sel.el && sel.el.closest(".gallery"); if (!gal) return;
+  const fs = await pickFiles(true); if (fs.length) await fillGallery(gal, fs);
+};
+
+/* ---------- adding things ---------- */
+const PH = "images/placeholder.svg";
+const T = {
+  h2: () => `<h2>New section</h2>`,
+  p: () => `<p>Write something here.</p>`,
+  ul: () => `<ul class="bullets"><li>First point</li><li>Second point</li></ul>`,
+  img: () => `<img src="${PH}" alt="" loading="lazy" class="hero-img">`,
+  figure: () => `<figure><img src="${PH}" alt="" loading="lazy"><figcaption>Caption, like who made it</figcaption></figure>`,
+  gallery: () => `<div class="gallery"><img src="${PH}" alt="" loading="lazy"><img src="${PH}" alt="" loading="lazy"><img src="${PH}" alt="" loading="lazy"></div>`,
+  video: () => `<div class="video"><iframe src="" title="Video" loading="lazy" allow="fullscreen; picture-in-picture" allowfullscreen></iframe></div>`,
+  facts: () => `<div class="facts"><div class="fact"><b>My role</b>Producer</div><div class="fact"><b>Team</b>8 people</div><div class="fact"><b>Timeline</b>10 weeks</div><div class="fact"><b>Tools</b>Jira, Unreal Engine 5</div></div>`,
+  callout: () => `<div class="callout"><h3>A hard call I made</h3><p>What was the problem, what did you decide, and what happened because of it?</p></div>`,
+  phase: () => `<span class="phase">Part 1 · Weeks 1 to 10</span>`,
+  story: () => `<p class="story">"A quote from a teammate or professor about working with you."</p>`,
+  btn: () => `<p><a class="btn" href="mailto:sofiamelos.art@gmail.com">Get in touch</a></p>`,
+  hr: () => `<hr class="divider">`,
+  step: () => `<div class="step"><h3>New step</h3><p>Describe what happened in this part of the project and what you did.</p><img src="${PH}" alt="" loading="lazy"></div>`,
+  card: () => `<a class="tile" href="index.html"><div class="art"><img src="${PH}" alt="" loading="lazy"></div><div class="cap"><h2>Project name</h2><div class="tags"><span class="prod">Production</span><span>Art</span></div><p class="role">Your role · team size</p><p>One or two sentences about the project.</p><span class="go">View project</span></div></a>`
+};
+function htmlToNode(html) { const t = doc.createElement("template"); t.innerHTML = html.trim(); return t.content.firstElementChild; }
+function insertPoint(kind) {
+  // returns [parent, refNodeToInsertAfter or null]
+  if (kind === "card") {
+    const wall = doc.querySelector(".wall"); if (!wall) return null;
+    const t = sel.block && sel.block.closest(".tile");
+    return [wall, t && t.parentElement === wall ? t : wall.lastElementChild];
+  }
+  let b = sel.el ? (sel.block || blockOf(sel.el)) : null;
+  while (b && !(b.parentElement && b.parentElement.matches(FLOW))) b = b.parentElement;
+  if (b && kind === "step" && b.parentElement.matches(".step")) b = b.parentElement;
+  if (b) return [b.parentElement, b];
+  const steps = doc.querySelectorAll("main .step");
+  if (kind !== "step" && steps.length) { const s = steps[steps.length - 1]; return [s, s.lastElementChild]; }
+  const main = doc.querySelector("#work") || doc.querySelector("main");
+  return [main, main.lastElementChild];
+}
+document.querySelectorAll("[data-add]").forEach(btn => btn.onclick = async () => {
+  if (!doc) return;
+  const kind = btn.dataset.add;
+  const pt = insertPoint(kind); if (!pt) return;
+  snapshot();
+  const node = htmlToNode(T[kind]());
+  const [parent, ref] = pt;
+  if (ref) ref.after(node); else parent.appendChild(node);
+  makeEditable(node.parentElement);
+  if (node.matches(TEXT)) { node.setAttribute("contenteditable", "true"); }
+  if (kind === "card") reclassTiles(parent);
+  node.scrollIntoView({ block: "center", behavior: "smooth" });
+  select(node, node);
+  markDirty();
+  if (kind === "img" || kind === "figure" || kind === "card" || kind === "step") {
+    const img = node.tagName === "IMG" ? node : node.querySelector("img");
+    select(img); sel.block && sel.block.classList.add("ed-sel");
+    const [f] = await pickFiles(false); if (f) replaceImage(img, f);
+  } else if (kind === "gallery") {
+    const fs = await pickFiles(true); if (fs.length) { select(node.querySelector("img")); await fillGallery(node, fs); }
+  } else if (kind === "video") {
+    $("videoUrl").focus(); status("Paste your YouTube or Vimeo link in the box on the left.");
+  } else {
+    const first = node.matches("[contenteditable]") ? node : node.querySelector("[contenteditable]");
+    if (first) { placeCaret(first, false); const r = doc.createRange(); r.selectNodeContents(first); const s = doc.getSelection(); s.removeAllRanges(); s.addRange(r); }
+  }
 });
 
-loadPage();
+/* ---------- new + deleted pages ---------- */
+$("newPageBtn").onclick = () => { $("newPageForm").classList.toggle("hidden"); $("npTitle").focus(); };
+$("npCancel").onclick = () => $("newPageForm").classList.add("hidden");
+const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+function projectTemplate(title, role) {
+  return `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${esc(title)} | Sofia Melo Stevens</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site"><div class="inner">
+  <a class="brand" href="index.html">Sofia Melo Stevens</a>
+  <nav>
+    <a class="active" href="index.html">Work</a>
+    <a href="about.html">About</a>
+    <a href="resume.html">Resume</a>
+  </nav>
+</div></header>
+
+<main>
+  <a class="back" href="index.html">&larr; All work</a>
+  <h1>${esc(title)}</h1>
+  <p class="lead">One or two sentences: what the project is, who it was for, and what you were responsible for.</p>
+
+  <div class="facts">
+    <div class="fact"><b>My role</b>${esc(role || "Your role")}</div>
+    <div class="fact"><b>Team</b>How many people</div>
+    <div class="fact"><b>Timeline</b>How long</div>
+    <div class="fact"><b>Tools</b>Jira, Unreal Engine 5, etc.</div>
+  </div>
+
+  <img class="hero-img" src="${PH}" alt="">
+
+  <h2>My role</h2>
+  <p>What you owned on this project.</p>
+  <ul class="bullets">
+    <li>Something you led or managed</li>
+    <li>Something you planned or tracked</li>
+    <li>Something you built yourself</li>
+  </ul>
+
+  <div class="step">
+    <h3>Planning the work</h3>
+    <p>How you broke the project into tasks and assigned them. Add a screenshot of your schedule or task board.</p>
+    <img src="${PH}" alt="" loading="lazy">
+  </div>
+
+  <div class="callout">
+    <h3>A hard call I made</h3>
+    <p>What was the problem, what did you decide, and what happened because of it?</p>
+  </div>
+
+  <h2>Results</h2>
+  <p>What shipped, and what you'd do differently next time.</p>
+</main>
+
+<footer><p style="margin:0 auto">© Sofia Melo Stevens</p></footer>
+</body>
+</html>
+`;
+}
+function cardHtml(title, role, href) {
+  return `<a class="tile" href="${href}">
+        <div class="art"><img src="${PH}" alt="${esc(title)}" loading="lazy"></div>
+        <div class="cap">
+          <h2>${esc(title)}</h2>
+          <div class="tags"><span class="prod">Production</span><span>Art</span></div>
+          <p class="role">${esc(role || "Your role")}</p>
+          <p>One or two sentences about the project.</p>
+          <span class="go">View project</span>
+        </div>
+      </a>`;
+}
+async function editOtherPage(path, fn) {
+  if (path === current) { snapshot(); fn(doc); afterStructure(doc.querySelector(".wall")); return; }
+  const html = await getPageHtml(path);
+  const f = files.get(path);
+  const d = new DOMParser().parseFromString(html, "text/html");
+  if (f.baseline == null) f.baseline = "<!doctype html>\n" + d.documentElement.outerHTML;
+  fn(d);
+  f.current = "<!doctype html>\n" + d.documentElement.outerHTML;
+}
+$("npCreate").onclick = async () => {
+  const title = $("npTitle").value.trim();
+  if (!title) { $("npTitle").focus(); return; }
+  const role = $("npRole").value.trim();
+  let name = slug(title) + ".html", n = 2;
+  while (files.has(name) && !files.get(name).deleted) name = slug(title) + "-" + n++ + ".html";
+  const html = projectTemplate(title, role);
+  const old = files.get(name);
+  files.set(name, { isNew: !(old && old.exists), exists: !!(old && old.exists), current: html, baseline: old && old.exists ? (old.baseline ?? "") : html });
+  if ($("npCard").checked) {
+    try {
+      await editOtherPage("index.html", d => {
+        const wall = d.querySelector(".wall"); if (!wall) return;
+        const t = d.createElement("template"); t.innerHTML = cardHtml(title, role, name);
+        wall.appendChild(t.content.firstElementChild); reclassTiles(wall);
+      });
+    } catch (e) { status(friendlyError(e), "bad"); }
+  }
+  $("newPageForm").classList.add("hidden"); $("npTitle").value = ""; $("npRole").value = "";
+  fillPageSelect();
+  await openPage(name);
+  status(`Created ${name}. Fill it in, then Publish.`, "ok");
+};
+$("delPageBtn").onclick = async () => {
+  if (!current || current === "index.html") return;
+  if (!confirm(`Delete ${current}? Its card on the home page will be removed too. Nothing is deleted until you Publish.`)) return;
+  const gone = current, f = files.get(gone);
+  if (f.isNew) files.delete(gone); else f.deleted = true;
+  try {
+    await editOtherPage("index.html", d => {
+      d.querySelectorAll(`a.tile[href="${gone}"]`).forEach(t => t.remove());
+      const wall = d.querySelector(".wall"); if (wall) reclassTiles(wall);
+    });
+  } catch {}
+  current = null; doc = null;
+  fillPageSelect();
+  await openPage("index.html");
+  status(`${gone} will be deleted when you Publish.`);
+};
+
+/* ---------- colors ---------- */
+function readVar(name) { const m = css.current.match(new RegExp(name + "\\s*:\\s*(#[0-9a-fA-F]{3,8})")); return m ? m[1] : "#000000"; }
+function paintColors() { document.querySelectorAll("input[data-var]").forEach(i => i.value = readVar(i.dataset.var)); }
+function applyCss() { if (!doc) return; const st = doc.querySelector('style[data-ed="css"]'); if (st) st.textContent = css.current; markDirty(); }
+document.querySelectorAll("input[data-var]").forEach(inp => inp.oninput = () => {
+  css.current = css.current.replace(new RegExp("(" + inp.dataset.var + "\\s*:\\s*)#[0-9a-fA-F]{3,8}"), "$1" + inp.value);
+  applyCss();
+});
+$("cReset").onclick = () => { css.current = css.baseline; paintColors(); applyCss(); };
+
+/* ---------- move images off Wix ---------- */
+$("wixBtn").onclick = async () => {
+  const msg = $("wixMsg");
+  msg.textContent = "Looking through your pages…";
+  syncCurrent();
+  const found = new Map(); // url -> [pages]
+  for (const p of [...files.keys()].filter(p => !files.get(p).deleted)) {
+    try {
+      const html = await getPageHtml(p);
+      (html.match(/https:\/\/static\.wixstatic\.com\/media\/[^"'\s)]+/g) || []).forEach(u => { if (!found.has(u)) found.set(u, new Set()); found.get(u).add(p); });
+    } catch {}
+  }
+  if (!found.size) { msg.innerHTML = '<span class="ok">No Wix images left. You\'re all set.</span>'; return; }
+  let ok = 0, fail = 0;
+  const swaps = new Map();
+  for (const u of found.keys()) {
+    msg.textContent = `Copying ${ok + fail + 1} of ${found.size}…`;
+    try {
+      const res = await fetch(u, { mode: "cors" });
+      if (!res.ok) throw 0;
+      const blob = await res.blob();
+      const file = new File([blob], u.split("/").pop().replace(/~mv2/, ""), { type: blob.type || "image/jpeg" });
+      const { path } = await processImage(file);
+      swaps.set(u, path); ok++;
+    } catch { fail++; }
+  }
+  for (const [u, pages] of found) {
+    if (!swaps.has(u)) continue;
+    for (const p of pages) {
+      const f = files.get(p);
+      if (f.baseline == null) {
+        const d = new DOMParser().parseFromString(f.raw ?? await getPageHtml(p), "text/html");
+        f.baseline = "<!doctype html>\n" + d.documentElement.outerHTML;
+        f.current = f.baseline;
+      }
+      f.current = f.current.split(u).join(swaps.get(u));
+    }
+  }
+  if (current) { const keep = current; current = null; doc = null; await openPage(keep); }
+  refreshChanges();
+  msg.innerHTML = fail
+    ? `Copied <b>${ok}</b>. <span class="bad">${fail} couldn't be copied</span> (Wix blocked them). For those, download the picture from Wix and use Replace image.`
+    : `<span class="ok">Copied all ${ok} images.</span> Press Publish to save them.`;
+};
+
+/* ---------- publish ---------- */
+function referencedUploads(texts) {
+  const all = texts.join("\n");
+  return [...uploads.keys()].filter(p => all.includes(p));
+}
+$("publish").onclick = async () => {
+  const list = changedList();
+  if (!list.length || !token) return;
+  const btn = $("publish"); btn.disabled = true;
+  status("Publishing…");
+  try {
+    const texts = [];
+    const tree = [];
+    for (const c of list) {
+      if (c.kind === "deleted") { tree.push({ path: c.path, mode: "100644", type: "blob", sha: null }); continue; }
+      const content = c.path === "style.css" ? css.current : files.get(c.path).current;
+      texts.push(content);
+      tree.push({ path: c.path, mode: "100644", type: "blob", content });
+    }
+    const imgs = referencedUploads(texts);
+    let i = 0;
+    for (const p of imgs) {
+      status(`Uploading images (${++i} of ${imgs.length})…`);
+      const b = await gh(repoPath("/git/blobs"), { method: "POST", body: { content: await blobToB64(uploads.get(p).blob), encoding: "base64" } });
+      tree.push({ path: p, mode: "100644", type: "blob", sha: b.sha });
+    }
+    status("Saving to GitHub…");
+    const ref = await gh(repoPath(`/git/ref/heads/${CFG.branch}`));
+    const parent = await gh(repoPath(`/git/commits/${ref.object.sha}`));
+    const newTree = await gh(repoPath("/git/trees"), { method: "POST", body: { base_tree: parent.tree.sha, tree } });
+    const names = list.map(c => c.path);
+    const commit = await gh(repoPath("/git/commits"), { method: "POST", body: { message: "Update " + (names.length > 3 ? names.length + " files" : names.join(", ")) + " from site editor", tree: newTree.sha, parents: [ref.object.sha] } });
+    await gh(repoPath(`/git/refs/heads/${CFG.branch}`), { method: "PATCH", body: { sha: commit.sha } });
+    // everything published becomes the new starting point
+    for (const c of list) {
+      if (c.path === "style.css") { css.baseline = css.current; continue; }
+      const f = files.get(c.path);
+      if (c.kind === "deleted") { files.delete(c.path); continue; }
+      f.baseline = f.current; f.isNew = false; f.exists = true;
+    }
+    fillPageSelect();
+    refreshChanges();
+    status(`Published! Your <a href="${SITE}" target="_blank" rel="noopener">live site</a> updates in about a minute.`, "ok");
+  } catch (e) {
+    status(friendlyError(e), "bad");
+    refreshChanges();
+  }
+};
+
+/* ---------- download fallback (no key) ---------- */
+$("download").onclick = () => {
+  const list = changedList().filter(c => c.kind !== "deleted");
+  const texts = [];
+  const save = (name, blob) => { const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove(); };
+  for (const c of list) {
+    const content = c.path === "style.css" ? css.current : files.get(c.path).current;
+    texts.push(content);
+    save(c.path, new Blob([content], { type: c.path.endsWith(".css") ? "text/css" : "text/html" }));
+  }
+  referencedUploads(texts).forEach(p => save(p.split("/").pop(), uploads.get(p).blob));
+  status("Downloaded. Upload the pages to your repo, and the images into its images folder.");
+};
+
+/* ---------- preview size ---------- */
+$("vDesk").onclick = () => { $("frame").classList.remove("phone"); $("vDesk").classList.add("on"); $("vPhone").classList.remove("on"); };
+$("vPhone").onclick = () => { $("frame").classList.add("phone"); $("vPhone").classList.add("on"); $("vDesk").classList.remove("on"); };
+
+/* ---------- start ---------- */
+(async function start() {
+  showSetup();
+  try { css.baseline = css.current = await readRepoFile("style.css"); paintColors(); }
+  catch (e) { status(friendlyError(e), "bad"); }
+  await loadPageList();
+  await openPage(pagePaths.includes("index.html") ? "index.html" : pagePaths[0]);
+})();
+})();
 </script>
 </body>
 </html>
